@@ -1,2 +1,8 @@
 *.exe
 main.cc
+gen.cc
+ans
+input
+output
+*.bat
+std.cc

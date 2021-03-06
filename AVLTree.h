@@ -12,7 +12,7 @@ using std::min;
 
 namespace AVLTreeSpace {
     class AVLTreeNode {
-        using PtrNode = AVLTreeNode*;
+        using PtrAVLNode = AVLTreeNode*;
 
     public:
         AVLTreeNode() {}
@@ -28,8 +28,8 @@ namespace AVLTreeSpace {
 
     private:
         int key;
-        PtrNode left;
-        PtrNode right;
+        PtrAVLNode left;
+        PtrAVLNode right;
         int height;
         // int count;
     };
@@ -42,7 +42,7 @@ namespace AVLTreeSpace {
     }
 
     class AVLTree {
-        using PtrNode = AVLTreeNode*;
+        using PtrAVLNode = AVLTreeNode*;
 
     public:
         AVLTree() : root(nullptr) {}
@@ -61,9 +61,9 @@ namespace AVLTreeSpace {
         }
 
     private:
-        PtrNode root;
+        PtrAVLNode root;
 
-        void realPrintTree(PtrNode node, int depth) {
+        void realPrintTree(PtrAVLNode node, int depth) {
             if (node == nullptr) {
                 return;
             }
@@ -75,7 +75,7 @@ namespace AVLTreeSpace {
             realPrintTree(node->right, depth + 2);
         }
 
-        PtrNode realInsert(const int& x, PtrNode node) {
+        PtrAVLNode realInsert(const int& x, PtrAVLNode node) {
             if (node == nullptr) {
                 node = new AVLTreeNode;
                 node->key = x;
