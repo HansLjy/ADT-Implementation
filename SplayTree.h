@@ -1,6 +1,7 @@
 #ifndef SPLAYTREE_H
 #define SPLAYTREE_H
 
+#include <iostream>
 #define SPLAY_DEBUG
 #define SPLAY_PORTABLE
 
