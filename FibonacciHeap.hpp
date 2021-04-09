@@ -57,13 +57,7 @@ private:
 	void insertTree(PtrNode node);	// Insert a new tree
 	void deleteTree(PtrNode node);	// For memory recollection
 	void printTree(PtrNode node, int step);
-	friend void merge<T>(FibonacciHeap* fib_a, FibonacciHeap* fib_b);
 };
-
-// Merge B into A
-template <typename T>
-void merge(FibonacciHeap<T>* fib_a, FibonacciHeap<T>* fib_b);
-
 
 // Implementation below
 
@@ -286,21 +280,43 @@ void FibonacciHeap<T>::insertTree(PtrNode node) {
 
 template <typename T>
 void FibonacciHeap<T>::removeRoot(PtrNode node) {
-	if (node->prev_sibling != nullptr) {
-		node->prev_sibling->next_sibling = node->next_sibling;
-	}
-	if (node->next_sibling != nullptr) {
-		node->next_sibling->prev_sibling = node->prev_sibling;
-	}
-	if (head == node) {
-		head = node->next_sibling;
-	}
+	// if (node->prev_sibling != nullptr) {
+	// 	node->prev_sibling->next_sibling = node->next_sibling;
+	// }
+	// if (node->next_sibling != nullptr) {
+	// 	node->next_sibling->prev_sibling = node->prev_sibling;
+	// }
+	// if (head == node) {
+	// 	head = node->next_sibling;
+	// }
 	// cut the tree from the heap
 
-	for (PtrNode itr = node->first_child, nxt; itr != nullptr; itr = nxt) {
-		nxt = itr->next_sibling;
+	PtrNode last = nullptr, first = node->first_child;
+	for (PtrNode itr = first; itr != nullptr; itr = itr->next_sibling) {
+		last = itr;
 		itr->parent = nullptr;	// Make every subtree of the current node a tree
-		insertTree(itr);
+	}
+
+	// Merge the list back
+	if (first) {
+		first->prev_sibling = node->prev_sibling;
+		last->next_sibling = node->next_sibling;
+		if (node->prev_sibling) {
+			node->prev_sibling->next_sibling = first;
+		}
+		if (node->next_sibling) {
+			node->next_sibling->prev_sibling = last;
+		}
+	} else {
+		if (node->prev_sibling) {
+			node->prev_sibling->next_sibling = node->next_sibling;
+		}
+		if (node->next_sibling) {
+			node->next_sibling->prev_sibling = node->prev_sibling;
+		}
+	}
+	if (head == node) {
+		head = first ? first : node->next_sibling;
 	}
 	delete node;
 }
@@ -322,21 +338,10 @@ void FibonacciHeap<T>::printTree(PtrNode node, int step) {
 	for (int i = 0; i < step; i++) {
 		std::cout << '-';
 	}
-	node->key.print();
-	// std::cout << node->key << std::endl;
+	// node->key.print();
+	std::cout << node->key << std::endl;
 	for (PtrNode itr = node->first_child; itr != nullptr; itr = itr->next_sibling) {
 		printTree(itr, step + 2);
-	}
-}
-
-template <typename T>
-void merge(FibonacciHeap<T>* fib_a, FibonacciHeap<T>* fib_b) {
-	if (fib_b->head == nullptr) {
-		return;
-	}
-	for (decltype(fib_b->head) itr = fib_b->head, nxt; itr != nullptr; itr = nxt) {
-		nxt = itr->next_sibling;
-		fib_a->insertTree(itr);	// Insert all the elements of B into A
 	}
 }
 
